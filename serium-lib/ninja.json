@@ -1,0 +1,10 @@
+[
+  {
+    "name": "NINJA/USDC",
+    "address": "J4oPt5Q3FYxrznkXLkbosAWrJ4rZLqJpGqz7vZUL4eMM",
+    "deprecated": false,
+    "programId": "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+    "symbol1":"https://raw.githubusercontent.com/ninjaprotocolsol/ninjaprotocol/main/newninja-token.png",
+    "symbol2":"https://cdn.jsdelivr.net/gh/solana-labs/token-list@main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png"
+  }
+]
