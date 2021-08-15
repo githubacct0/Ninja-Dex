@@ -183,10 +183,21 @@ backdrop-filter: blur(30px);
 .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
   color: #898989;
 }
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected {
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected {
     color: #fff;
     border-bottom: 3px solid #fff;
 }
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover{
+  color: #851CEF;
+}
+
 
 .ant-slider-track, .ant-slider ant-slider-track:hover {
     background-color: #fff !important;
@@ -263,7 +274,7 @@ box-shadow: 0px 0px 14px 2px #851CEF;
     font-weight: 700;
 }
 .ant-tabs-tab:hover{
-  color: #fff;
+  color: #851CEF;
 }
 .ant-tabs-tab{
   font-size: 16px;
