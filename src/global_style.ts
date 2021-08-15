@@ -307,7 +307,7 @@ box-shadow: 0px 0px 14px 2px #851CEF;
 }
 
 .ant-menu-item, ant-menu-item-only-child, ant-menu-item-selected{
-    border-bottom: 0px solid #fff !important;
+    border-bottom: 2px solid transparent !important;
 }
 .ant-menu-item-selected > .titlemk{
   border-bottom:3px solid #851CEF !important;
