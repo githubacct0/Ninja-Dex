@@ -38,9 +38,8 @@ border-radius: 0px;
 
 const sliderMarks = {
   0: '0%',
-  15: '15%',
-  30: '30%',
-  45: '45%',
+  23: '23%',
+  46: '46%',
   69: '69%',
   100: '100%',
 };
@@ -294,12 +293,10 @@ export default function TradeForm({
             style={{
               width: '50%',
               textAlign: 'center',
-              borderRadius: 0,
-              fontSize: 20,
-			  fontWeight: 700,
-			  color: '#FFF',
-              background: side === 'buy' ? '#27AE60' : '#282F3F ',
-              borderColor: side === 'buy' ? '#27AE60' : '#851CEF ',
+              borderRadius: 6,
+              fontSize:20,
+              background: side === 'buy' ? '#239B56' : '#282F3F ',
+              borderColor: side === 'buy' ? '#239B56' : '#282F3F ',
             }}
           >
             BUY
@@ -309,18 +306,17 @@ export default function TradeForm({
             style={{
               width: '50%',
               fontSize:20,
-			  fontWeight: 700,
               textAlign: 'center',
-              borderRadius: 0,
-              background: side === 'sell' ? '#CB4335' : '#282F3F  ',
-              borderColor: side === 'sell' ? '#CB4335' : '#282F3F ',
+              borderRadius: 6,
+              background: side === 'sell' ? '#E74C3C' : '#282F3F  ',
+              borderColor: side === 'sell' ? '#E74C3C' : '#282F3F ',
             }}
           >
             SELL
           </Radio.Button>
         </Radio.Group>
         <Input
-          style={{ textAlign: 'right', border: "1px solid #851CEF  ", borderRadius: '0px', marginTop:10, background: '#212535' }}
+          style={{ textAlign: 'right', border: "1px solid #851CEF  ", borderRadius: '4px', marginTop:10, background: '#212535' }}
           addonBefore={<div style={{ width: '30px', }}>Price</div>}
           suffix={
             <span style={{ fontSize: 12}}>{quoteCurrency}</span>
@@ -332,7 +328,7 @@ export default function TradeForm({
         />
         <Input.Group compact style={{ paddingBottom: 10, paddingTop: 10 }}>
           <Input
-            style={{ width: 'calc(50% + 30px)', textAlign: 'right', border: "1px solid #851CEF ", borderRadius: '0px', marginTop:10, background: '#212535' }}
+            style={{ width: 'calc(50% + 30px)', textAlign: 'right', border: "1px solid #851CEF ", borderRadius: '4px', marginTop:10, background: '#212535' }}
             addonBefore={<div style={{ width: '30px', }}>Size</div>}
             suffix={
               <span style={{ fontSize: 12}}>{baseCurrency}</span>
@@ -343,7 +339,7 @@ export default function TradeForm({
             onChange={(e) => onSetBaseSize(parseFloat(e.target.value))}
           />
           <Input
-            style={{ width: 'calc(50% - 30px)', textAlign: 'right', border: "1px solid #851CEF   ", borderRadius: '0px' ,paddingBottom: '6px', marginTop:10, background: '#212535' }}
+            style={{ width: 'calc(50% - 30px)', textAlign: 'right', border: "1px solid #851CEF   ", borderRadius: '4px' ,paddingBottom: '6px', marginTop:10, background: '#212535' }}
             suffix={
               <span style={{ fontSize: 12}}>
                 {quoteCurrency}

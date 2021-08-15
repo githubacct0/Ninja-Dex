@@ -4,6 +4,9 @@ import OpenOrdersPage from './pages/OpenOrdersPage';
 import React from 'react';
 import BalancesPage from './pages/BalancesPage';
 import ConvertPage from './pages/ConvertPage';
+import DexLearnPage from './pages/DexLearnPage';
+import CreateWalletPage from './pages/learn/CreateWalletPage';
+import CreateFtxPage from './pages/learn/CreateFtxPage';
 import BasicLayout from './components/BasicLayout';
 import ListNewMarketPage from './pages/ListNewMarketPage';
 import NewPoolPage from './pages/pools/NewPoolPage';
@@ -26,6 +29,9 @@ export function Routes() {
             <Route exact path="/orders" component={OpenOrdersPage} />
             <Route exact path="/balances" component={BalancesPage} />
             <Route exact path="/convert" component={ConvertPage} />
+            <Route exact path="/dexlearn" component={DexLearnPage} />
+            <Route exact path="/dexlearn/createwallet" component={CreateWalletPage} />
+            <Route exact path="/dexlearn/createftx" component={CreateFtxPage} />
             <Route
               exact
               path="/list-new-market"
