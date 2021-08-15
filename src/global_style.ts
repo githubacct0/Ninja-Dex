@@ -204,6 +204,14 @@ backdrop-filter: blur(30px);
 {
   color: #851CEF;
 }
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active,
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open, 
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected
+{
+  border-bottom: 0px solid transparent;
+  transition: border-color 0, background 0;
+}
 
 .ant-slider-track, .ant-slider ant-slider-track:hover {
     background-color: #fff !important;
