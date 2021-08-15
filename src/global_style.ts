@@ -177,6 +177,9 @@ backdrop-filter: blur(30px);
   height: 34px;
   background-color: #fff;
 } 
+.ant-menu-horizontal > .ant-menu-item{
+  font-size:22px;
+}
 .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
   color: #898989;
 }
