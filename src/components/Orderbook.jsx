@@ -23,9 +23,9 @@ const MarkPriceTitle = styled(Row)`
   padding: 5px 0 5px;
   font-weight: 600;
   margin-top:0px;
-  margin-bottom:10px;
+  margin-bottom:3px;
   background: #282F3F;
-  border-radius: 0px;
+  border-radius: 10px;
 `;
 
 const Line = styled.div`
@@ -64,14 +64,14 @@ const LineTwo = styled.div`
 const Price = styled.div`
   position: absolute;
   right: 5px;
-  color: #27AE60;
+  color: #0EE9A7;
   font-weight: 700;
 `;
 
 const PriceTwo = styled.div`
   position: absolute;
   left: 5px;
-  color: #B20E0B;
+  color: #FF4747;
   font-weight: 700;
 `;
 
@@ -322,10 +322,10 @@ const MarkPriceComponent = React.memo(
       <Title>Orderbook</Title>   
         <Col style={{ color: markPriceColor }}>
           {markPrice > previousMarkPrice && (
-            <ArrowUpOutlined style={{ marginRight: 5 , backgroundColor: '#0EE9A7', borderRadius: '50%', padding: '4px'}} className="arrow_white" />
+            <ArrowUpOutlined style={{ marginRight: 10 , backgroundColor: '#0EE9A7', borderRadius: '50%', padding: '3px'}} className="arrow_white" />
           )}
           {markPrice < previousMarkPrice && (
-            <ArrowDownOutlined style={{ marginRight: 5 , backgroundColor: '#FF4747', borderRadius: '50%', padding: '5px'}} className="arrow_white" />
+            <ArrowDownOutlined style={{ marginRight: 10 , backgroundColor: '#FF4747', borderRadius: '50%', padding: '3px'}} className="arrow_white" />
           )}
           {formattedMarkPrice || '----'}
         </Col>
