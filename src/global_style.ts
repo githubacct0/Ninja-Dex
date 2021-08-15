@@ -194,10 +194,16 @@ backdrop-filter: blur(30px);
     border-bottom: 3px solid #fff;
 }
 .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, 
-.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover{
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover,
+.ant-menu-item a:hover,
+.ant-menu-item:hover, 
+.ant-menu-item-active, 
+.ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, 
+.ant-menu-submenu-active, 
+.ant-menu-submenu-title:hover
+{
   color: #851CEF;
 }
-
 
 .ant-slider-track, .ant-slider ant-slider-track:hover {
     background-color: #fff !important;
