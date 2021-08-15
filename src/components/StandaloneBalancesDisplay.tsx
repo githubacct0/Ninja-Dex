@@ -27,18 +27,18 @@ import {useLocalStorageState} from "../utils/utils";
 import { AUTO_SETTLE_DISABLED_OVERRIDE } from "../utils/preferences";
 
 const RowBox = styled(Row)`
-  padding-bottom: 20px;
+  padding-bottom: 0px;
 `;
 
 const Tip = styled.p`
-  font-size: 12px;
+  font-size: 15px;
   padding-top: 5px;
 `;
 
 const ActionButton = styled(Button)`
-  color: #2abdd2;
-  background-color: #212734;
-  border-width: 1px;
+  color: #851CEF;
+  background-color: #851CEF;
+  border-width: 2px;
 `;
 
 export default function StandaloneBalancesDisplay() {
@@ -182,22 +182,22 @@ export default function StandaloneBalancesDisplay() {
     ],
   ];
   return (
-    <FloatingElement style={{ flex: 1, paddingTop: 10, minHeight: '370px' }}>
+    <FloatingElement style={{ flex: 1, paddingTop: 0}}>
       {formattedBalances.map(
         ([currency, balances, baseOrQuote, mint, symbol1], index) => (
           <React.Fragment key={index}>
 
             <Divider style={{ borderColor: 'white' }}>
             
-              {<img src={symbol1?symbol1:logo} style={{height: '20px', padding: '2px', border: '1px solid #2D81FF', borderRadius:'50%'}}/>}{<span style={{paddingLeft: '15px'}}></span>}{currency}{<span className="text-white" style={{paddingLeft: '15px'}}></span>}
+              {<img src={symbol1?symbol1:logo} style={{height: '30px', padding: '0px', border: '2px solid #851CEF', borderRadius:'50%'}}/>}{<span style={{paddingLeft: '15px'}}></span>}{currency}{<span className="text-white" style={{paddingLeft: '5px'}}></span>}
               {mint && (
                 <Popover
                   content={<LinkAddress address={mint} />}
-                  placement="bottomRight"
-                  title="Token mint"
+                  placement="top"
+                  title="Token mint address"
                   trigger="hover"
                 >
-                    <InfoCircleOutlined style={{ color: '#2abdd2' }} />
+                    <InfoCircleOutlined style={{color: '#851CEF'}} />
 					
                 </Popover>
               )}
@@ -274,5 +274,6 @@ export default function StandaloneBalancesDisplay() {
         onClose={() => setBaseOrQuote('')}
       />
     </FloatingElement>
+
   );
 }
