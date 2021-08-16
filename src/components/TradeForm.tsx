@@ -32,8 +32,9 @@ const Button = styled(AntdButton)`
 const RadioButton = styled(Radio.Button)`
   width: 50% !important;
   text-align: center !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
   font-size: 20px !important;
+  font-weight: 700;
 
   &:hover {
     color: #21073C;
@@ -41,13 +42,13 @@ const RadioButton = styled(Radio.Button)`
 `;
 
 const SellButton = styled(RadioButton)`
-  background: ${(props) => props.side === 'sell' ? '#E74C3C': '#282F3F'} !important;
-  border-color: ${(props) => props.side === 'sell' ? '#E74C3C': '#282F3F'} !important;
+  background: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
+  border-color: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
 `;
 
 const BuyButton = styled(RadioButton)`
-  background: ${(props) =>  props.side === 'buy' ? '#239B56' : '#282F3F' } !important;
-  border-color: ${(props) =>  props.side === 'buy' ? '#239B56' : '#282F3F' } !important;
+  background: ${(props) =>  props.side === 'buy' ? '#099268' : '#282F3F' } !important;
+  border-color: ${(props) =>  props.side === 'buy' ? '#099268' : '#282F3F' } !important;
 `;
 
 const sliderMarks = {

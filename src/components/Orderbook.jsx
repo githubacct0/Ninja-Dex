@@ -25,7 +25,7 @@ const MarkPriceTitle = styled(Row)`
   margin-top:0px;
   margin-bottom:10px;
   background: #282F3F;
-  border-radius: 0px;
+  border-radius: 4px;
 `;
 
 const Line = styled.div`
@@ -64,14 +64,14 @@ const LineTwo = styled.div`
 const Price = styled.div`
   position: absolute;
   right: 5px;
-  color: #27AE60;
+  color: #0EE9A7;
   font-weight: 700;
 `;
 
 const PriceTwo = styled.div`
   position: absolute;
   left: 5px;
-  color: #B20E0B;
+  color: #FF4747;
   font-weight: 700;
 `;
 

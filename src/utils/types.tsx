@@ -141,3 +141,8 @@ export interface BonfidaTrade {
   feeCost: number;
   marketAddress: string;
 }
+
+export interface BonfidaVolume {
+  volumeUsd: number;
+  volume: number;
+}

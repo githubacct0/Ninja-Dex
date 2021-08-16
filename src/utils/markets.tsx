@@ -165,8 +165,10 @@ const _SLOW_REFRESH_INTERVAL = 5 * 1000;
 // For things that change frequently
 const _FAST_REFRESH_INTERVAL = 1000;
 
+const NINJA_TOKEN = 'NINJA';
+
 export const DEFAULT_MARKET = USE_MARKETS.find(
-  ({ name, deprecated }) => name === 'NINJA/USDC' && !deprecated,
+  ({ name, deprecated }) => name === `${NINJA_TOKEN}/USDC` && !deprecated,
 );
 
 export function getMarketDetails(
@@ -358,19 +360,60 @@ export function _useUnfilteredTrades(limit = 10000) {
 }
 
 export function useBonfidaTrades() {
-  const { market } = useMarket();
+  const { market, baseCurrency, quoteCurrency } = useMarket();
   const marketAddress = market?.address.toBase58();
+  const marketName = baseCurrency! + quoteCurrency!;
+  const isNinja = baseCurrency == NINJA_TOKEN || quoteCurrency == NINJA_TOKEN;
 
-  async function getBonfidaTrades() {
-    if (!marketAddress) {
+  const params = isNinja ? marketAddress : marketName
+
+  async function getRecentNinjaTrades() {
+    if (!params) {
       return null;
     }
-    return await BonfidaApi.getRecentTrades(marketAddress);
+    return await BonfidaApi.getRecentNinjaTrades(params);
+  }
+
+  async function getBonfidaTrades() {
+    if (!params) {
+      return null;
+    }
+    return await BonfidaApi.getRecentTrades(params);
   }
 
   return useAsyncData(
-    getBonfidaTrades,
-    tuple('getBonfidaTrades', marketAddress),
+    isNinja ? getRecentNinjaTrades : getBonfidaTrades,
+    tuple('getBonfidaTrades', params),
+    { refreshInterval: _SLOW_REFRESH_INTERVAL },
+    false,
+  );
+}
+
+export function useBonfidaVolumes() {
+  const { market, baseCurrency, quoteCurrency } = useMarket();
+  const marketAddress = market?.address.toBase58();
+  const marketName = baseCurrency! + quoteCurrency!;
+  const isNinja = baseCurrency == NINJA_TOKEN || quoteCurrency == NINJA_TOKEN;
+
+  const params = isNinja ? marketAddress : marketName
+
+  async function get24HourNinjaVolumes() {
+    if (!params) {
+      return null;
+    }
+    return await BonfidaApi.get24HourNinjaVolumes(params);
+  }
+
+  async function get24HourVolumes() {
+    if (!params) {
+      return null;
+    }
+    return await BonfidaApi.get24HourVolumes(params);
+  }
+
+  return useAsyncData(
+    isNinja ? get24HourNinjaVolumes : get24HourVolumes,
+    tuple('get24HourVolumes', params),
     { refreshInterval: _SLOW_REFRESH_INTERVAL },
     false,
   );

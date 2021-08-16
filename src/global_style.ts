@@ -312,7 +312,7 @@ box-shadow: 0px 0px 14px 2px #851CEF;
 }
 .ant-menu-submenu-title {
   &:hover {
-    color: #21073C !important;
+    color: #851CEF !important;
     border-bottom: 3px solid #851CEF !important;
   }
 }
