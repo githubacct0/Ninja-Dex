@@ -181,13 +181,10 @@ function TradePageInner() {
             />
           </Col>
           <Col>
-             <AddLink href="#/list-new-market" >ADD MARKET</AddLink>
-          </Col>
-          <Col>
-            {/* <PlusCircleOutlined
+             <PlusCircleOutlined
               style={{ color: '#2D81FF' }}
               onClick={() => setAddMarketVisible(true)}
-            /> */}
+            /> 
           </Col>
           <Col>
             {<span style={{fontSize: '22px'}}>${markPrice} USDC</span>}
