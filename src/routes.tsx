@@ -4,6 +4,7 @@ import OpenOrdersPage from './pages/OpenOrdersPage';
 import React from 'react';
 import BalancesPage from './pages/BalancesPage';
 import ConvertPage from './pages/ConvertPage';
+import DexLearnPage from './pages/DexLearnPage';
 import BasicLayout from './components/BasicLayout';
 import ListNewMarketPage from './pages/ListNewMarketPage';
 import NewPoolPage from './pages/pools/NewPoolPage';
