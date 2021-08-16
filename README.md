@@ -7,22 +7,50 @@ Hardfork of projectserum's DEX-UI
 Run `yarn` to install dependencies, then run `yarn start` to start a development server or `yarn build` to create a production build that can be served by a static file server.
 
 ---
-
 FOR ERROR
 
-1. See how to `Running the UI` and install the DEX package
+1. See how to `Running the UI` and install the DEX package 
 2. After Package Installed
 3. open folder `node_modules/@project-serum/serum/lib/`
 4. Change `node_modules/@project-serum/serum/lib/markets.json` with new `serium-lib/markets.json`
 5. Change `node_modules/@project-serum/serum/lib/token-mints.json` with new `serium-lib/token-mints.json`
 6. V3 Add Change `node_modules/@project-serum/serum/lib/tokens_and_markets.d.ts` replace with `serum-lib/tokens_and_markets.d.ts`
 7. Restart server :) ALL DONE
-
 ---
 
----
 
-## Notes from original README below
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+Notes from original README below
+---
 
 ### Add Trading View charts
 
