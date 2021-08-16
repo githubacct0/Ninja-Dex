@@ -1,4 +1,4 @@
-import {Button, Input, Radio, Slider, Switch} from 'antd';
+import {Button as AntdButton, Input, Radio, Slider, Switch} from 'antd';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {
@@ -22,25 +22,38 @@ import {SwitchChangeEventHandler} from 'antd/es/switch';
 import {refreshCache} from '../utils/fetch-loop';
 import tuple from 'immutable-tuple';
 
-const SellButton = styled(Button)`
+const Button = styled(AntdButton)`
   margin: 0px 0px 0px 0px;
   background: #E74C3C;
-  border-color: #E74C3C;
+  border-color: ${(props) => props.sellOrBuy === 'sell' ? '#E74C3C' : '#27AE60'};
   border-radius: 0px;
 `;
 
-const BuyButton = styled(Button)`
-  margin: 0px 0px 0px 0px;
-  background: #27AE60;
-border-radius: 0px;
-  border-color: #27AE60;
+const RadioButton = styled(Radio.Button)`
+  width: 50% !important;
+  text-align: center !important;
+  border-radius: 6px !important;
+  font-size: 20px !important;
+
+  &:hover {
+    color: #21073C;
+  }
+`;
+
+const SellButton = styled(RadioButton)`
+  background: ${(props) => props.side === 'sell' ? '#E74C3C': '#282F3F'} !important;
+  border-color: ${(props) => props.side === 'sell' ? '#E74C3C': '#282F3F'} !important;
+`;
+
+const BuyButton = styled(RadioButton)`
+  background: ${(props) =>  props.side === 'buy' ? '#239B56' : '#282F3F' } !important;
+  border-color: ${(props) =>  props.side === 'buy' ? '#239B56' : '#282F3F' } !important;
 `;
 
 const sliderMarks = {
   0: '0%',
-  15: '15%',
-  30: '30%',
-  45: '45%',
+  23: '23%',
+  46: '46%',
   69: '69%',
   100: '100%',
 };
@@ -289,38 +302,15 @@ export default function TradeForm({
             width: '100%',
           }}
         >
-          <Radio.Button
-            value="buy"
-            style={{
-              width: '50%',
-              textAlign: 'center',
-              borderRadius: 0,
-              fontSize: 20,
-			  fontWeight: 700,
-			  color: '#FFF',
-              background: side === 'buy' ? '#27AE60' : '#282F3F ',
-              borderColor: side === 'buy' ? '#27AE60' : '#851CEF ',
-            }}
-          >
+          <BuyButton value="buy" side={side}>
             BUY
-          </Radio.Button>
-          <Radio.Button
-            value="sell"
-            style={{
-              width: '50%',
-              fontSize:20,
-			  fontWeight: 700,
-              textAlign: 'center',
-              borderRadius: 0,
-              background: side === 'sell' ? '#CB4335' : '#282F3F  ',
-              borderColor: side === 'sell' ? '#CB4335' : '#282F3F ',
-            }}
-          >
+          </BuyButton>
+          <SellButton value="sell" side={side}>
             SELL
-          </Radio.Button>
+          </SellButton>
         </Radio.Group>
         <Input
-          style={{ textAlign: 'right', border: "1px solid #851CEF  ", borderRadius: '0px', marginTop:10, background: '#212535' }}
+          style={{ textAlign: 'right', border: "1px solid #851CEF  ", borderRadius: '4px', marginTop:10, background: '#212535' }}
           addonBefore={<div style={{ width: '30px', }}>Price</div>}
           suffix={
             <span style={{ fontSize: 12}}>{quoteCurrency}</span>
@@ -332,7 +322,7 @@ export default function TradeForm({
         />
         <Input.Group compact style={{ paddingBottom: 10, paddingTop: 10 }}>
           <Input
-            style={{ width: 'calc(50% + 30px)', textAlign: 'right', border: "1px solid #851CEF ", borderRadius: '0px', marginTop:10, background: '#212535' }}
+            style={{ width: 'calc(50% + 30px)', textAlign: 'right', border: "1px solid #851CEF ", borderRadius: '4px', marginTop:10, background: '#212535' }}
             addonBefore={<div style={{ width: '30px', }}>Size</div>}
             suffix={
               <span style={{ fontSize: 12}}>{baseCurrency}</span>
@@ -343,7 +333,7 @@ export default function TradeForm({
             onChange={(e) => onSetBaseSize(parseFloat(e.target.value))}
           />
           <Input
-            style={{ width: 'calc(50% - 30px)', textAlign: 'right', border: "1px solid #851CEF   ", borderRadius: '0px' ,paddingBottom: '6px', marginTop:10, background: '#212535' }}
+            style={{ width: 'calc(50% - 30px)', textAlign: 'right', border: "1px solid #851CEF   ", borderRadius: '4px' ,paddingBottom: '6px', marginTop:10, background: '#212535' }}
             suffix={
               <span style={{ fontSize: 12}}>
                 {quoteCurrency}
@@ -373,27 +363,29 @@ export default function TradeForm({
         </div>
       </div>
       {side === 'buy' ? (
-        <BuyButton
+        <Button
           disabled={!price || !baseSize}
           onClick={onSubmit}
           block
+          sellOrBuy="buy"
           type="primary"
           size="large"
           loading={submitting}
         >
           Buy {baseCurrency}
-        </BuyButton>
+        </Button>
       ) : (
-        <SellButton
+        <Button
           disabled={!price || !baseSize}
           onClick={onSubmit}
           block
+          sellOrBuy="buy"
           type="primary"
           size="large"
           loading={submitting}
         >
           Sell {baseCurrency}
-        </SellButton>
+        </Button>
       )}
     </FloatingElement>
   );

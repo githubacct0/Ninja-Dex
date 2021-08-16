@@ -39,7 +39,14 @@ const Wrapper = styled.div`
     border: none !important;
   }
 `;
-
+const AddLink = styled.a`
+  padding: 5px;
+  color: #ffffff;
+  &:hover {
+    color:  #851CEF;
+  }
+  
+`;
 export default function TradePage() {
   const { marketAddress } = useParams();
   useEffect(() => {
@@ -173,7 +180,9 @@ function TradePageInner() {
               onDeleteCustomMarket={onDeleteCustomMarket}
             />
           </Col>
-          
+          <Col>
+             <AddLink href="#/list-new-market" >ADD MARKET</AddLink>
+          </Col>
           <Col>
             {/* <PlusCircleOutlined
               style={{ color: '#2D81FF' }}

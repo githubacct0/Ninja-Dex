@@ -18,8 +18,6 @@ const { TabPane } = Tabs;
 const EXTERNAL_LINKS = {}
 
 const options_complete = [
-  { value: 'How to create a SOL wallet', key: 'createwallet' },
-  { value: 'Create an account with FTX and buy SOL', key: 'createftx' },
   { value: 'Create an account with Binance and buy SOL', key: 'createbinance' },
   { value: 'How to create Binance account', key: 'createbinance' },
   { value: 'Connect SOL Wallet to Ninja DEX', key: 'dexconnect' },
