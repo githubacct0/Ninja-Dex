@@ -179,7 +179,7 @@ export default function TopBar() {
               borderBottom: 'none',
               backgroundColor: 'transparent',
               display: 'flex',
-              alignItems: 'flex-end',
+              alignItems: 'end',
               flex: 1,
             }}
           >
@@ -197,15 +197,15 @@ export default function TopBar() {
               </Menu.Item>
             )}
  
-			<Menu.SubMenu
+            <Menu.SubMenu
               title="Learn"
               onTitleClick={() =>
                 window.open(EXTERNAL_LINKS['/learn'], '_blank')
               }
               style={{ margin: '0 10px', fontWeight: 700, fontSize: '22px' }}
             >
-			  <Menu.Item key="/sol">
-                <a
+              <Menu.Item key="/sol">
+                      <a
                   href={EXTERNAL_LINKS['/sol']}
                   target="_blank"
                   rel="noopener noreferrer"

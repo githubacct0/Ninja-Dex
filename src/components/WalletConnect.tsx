@@ -1,9 +1,28 @@
 import React from 'react';
-import { Dropdown, Menu,Button } from 'antd';
+import { Dropdown, Menu, Button as AntdButton } from 'antd';
+import styled from 'styled-components';
 import { useWallet } from '../utils/wallet';
 import LinkAddress from './LinkAddress';
 import wallet_svg from '../assets/wallet.svg';
 import arrow_bottom from '../assets/arrow_bottom.svg';
+
+const Button = styled(AntdButton)`
+  background: transparent;
+  border: 0px;
+  padding: 5px;
+
+  &:hover {
+    color: ${(props) => (props.isConnectButton ? '#21073c' : '')};
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+  background: #851cef;
+  border-radius: 6px;
+  min-height: 38px;
+  align-items: baseline;
+`;
 
 export default function WalletConnect() {
   const { connected, wallet, select, connect, disconnect } = useWallet();
@@ -19,17 +38,20 @@ export default function WalletConnect() {
   );
 
   return (
-    <div style={{display: 'flex', background: "#851CEF", borderRadius: '6px', minHeight: "38px", alignItems: "baseline"}}>
-      
-      <Button style={{background: 'transparent', border: '0px', padding: '5px'}} onClick={connected ? disconnect : connect}>
+    <Container>
+      <Button isConnectButton onClick={connected ? disconnect : connect}>
         <img src={wallet_svg} alt="" height="30px" />
-        <span style={{ paddingLeft: '10px', paddingRight:'5', fontWeight: 'bold' }}>{connected ? 'Disconnect' : 'Connect'}</span>
+        <span
+          style={{ paddingLeft: '10px', paddingRight: '5', fontWeight: 'bold' }}
+        >
+          {connected ? 'Disconnect' : 'Connect'}
+        </span>
       </Button>
       <Dropdown overlay={menu}>
-        <Button style={{background: 'transparent', border: '0px', padding: '5px'}}>
+        <Button>
           <img src={arrow_bottom} alt="" height="20px" width="15px" />
         </Button>
       </Dropdown>
-    </div>
+    </Container>
   );
 }
