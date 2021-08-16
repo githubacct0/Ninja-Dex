@@ -15,7 +15,7 @@ const Title = styled.div`
   margin-top:0px;
   margin-bottom:0px;
   background: #282F3F;
-  border-radius: 10px;
+  border-radius: 4px;
 `;
 
 const SizeTitle = styled(Row)`

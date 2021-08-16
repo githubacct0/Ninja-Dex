@@ -17,9 +17,8 @@ import {
   PhantomWalletAdapter,
   SolletExtensionAdapter,
   MathWalletAdapter,
+  SolflareExtensionWalletAdapter,
 } from '../wallet-adapters';
-
-
 
 const ASSET_URL =
   'https://cdn.jsdelivr.net/gh/solana-labs/oyster@main/assets/wallets';
@@ -40,6 +39,17 @@ export const WALLET_PROVIDERS = [
     url: 'https://www.ledger.com',
     icon: `${ASSET_URL}/ledger.svg`,
     adapter: LedgerWalletAdapter,
+  },
+  {
+    name: 'Solflare',
+    url: 'https://solflare.com/access-wallet',
+    icon: `${ASSET_URL}/solflare.svg`,
+  },
+  {
+    name: 'Solflare Extension',
+    url: 'https://solflare.com',
+    icon: `${ASSET_URL}/solflare.svg`,
+    adapter: SolflareExtensionWalletAdapter,
   },
   {
     name: 'Phantom',
@@ -200,19 +210,12 @@ export function WalletProvider({ children }) {
                   style={{ marginRight: 8 }}
                 />
               }
-              style={{background: '#373642',
-                      border: '1px solid #FFFFFF',
-                      boxSizing: 'border-box',
-                      boxShadow: '0px 4px 30px 4px rgba(0, 0, 0, 0.25)',
-                      borderRadius: '6px',
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      marginBottom: 25,
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
-                      height: 'auto',
-                    }}
+              style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'left',
+                marginBottom: 8,
+              }}
             >
               {provider.name}
             </Button>
@@ -225,13 +228,11 @@ export function WalletProvider({ children }) {
 
 export function useWallet() {
   const context = useContext(WalletContext);
-  const { endpoint } = useConnectionConfig();
   if (!context) {
     throw new Error('Missing wallet context');
   }
 
   const wallet = context.wallet;
-
   return {
     connected: context.connected,
     wallet: wallet,
@@ -245,10 +246,5 @@ export function useWallet() {
     disconnect() {
       wallet?.disconnect();
     },
-    closeTokenAccount(publicKey, skipPreflight = false){
-      console.log(publicKey);
-    },
   };
 }
-
-

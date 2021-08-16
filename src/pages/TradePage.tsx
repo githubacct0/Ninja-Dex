@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Button, Col, Popover, Row, Select, Typography } from 'antd';
 import styled from 'styled-components';
+import moment from 'moment';
 import Orderbook from '../components/Orderbook';
 import UserInfoTable from '../components/UserInfoTable';
 import StandaloneBalancesDisplay from '../components/StandaloneBalancesDisplay';
@@ -12,7 +19,8 @@ import {
   useMarketsList,
   useUnmigratedDeprecatedMarkets,
   useMarkPrice,
-  getSymbol
+  useBonfidaTrades,
+  useBonfidaVolumes,
 } from '../utils/markets';
 import TradeForm from '../components/TradeForm';
 import TradesTable from '../components/TradesTable';
@@ -28,6 +36,7 @@ import { notify } from '../utils/notifications';
 import { useHistory, useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { TVChartContainer } from '../components/TradingView';
+import { isNullOrUndefined } from '../utils/utils';
 const { Option, OptGroup } = Select;
 
 const Wrapper = styled.div`
@@ -76,7 +85,6 @@ function TradePageInner() {
     customMarkets,
     setCustomMarkets,
     setMarketAddress,
-    baseCurrency, 
     quoteCurrency,
   } = useMarket();
   const markets = useMarketsList();
@@ -88,6 +96,9 @@ function TradePageInner() {
     width: window.innerWidth,
   });
   const markPrice = useMarkPrice();
+  const [change24HourPercent, setChange24HourPercent] = useState<number>();
+  const [trades, tradesLoaded] = useBonfidaTrades();
+  const [volumes, volumeLoaded] = useBonfidaVolumes();
 
   useEffect(() => {
     document.title = marketName ? `${marketName} — Serum` : 'Serum';
@@ -121,6 +132,34 @@ function TradePageInner() {
       [],
     ),
   };
+
+  const dayChange = useMemo(() => {
+    if (!tradesLoaded || !trades || trades.length == 0) return;
+
+    const compareTime = moment().subtract(1, 'days').unix();
+    let minAbs = Number.MAX_SAFE_INTEGER;
+    let minIndex = -1;
+    for (const [index, trade] of trades.entries()) {
+      const timeDiff = Math.abs(trade.time - compareTime);
+      if (minAbs > timeDiff) {
+        minAbs = timeDiff;
+        minIndex = index;
+      }
+    }
+
+    const yesterdayValue = trades[minIndex].price;
+    const change = Number(markPrice! - yesterdayValue);
+    const percentChange = (change * 100) / yesterdayValue;
+    setChange24HourPercent(percentChange);
+    return change;
+  }, [tradesLoaded, trades, markPrice]);
+
+  const volumeChange = useMemo(() => {
+    if (!volumeLoaded || !volumes) return;
+
+    return volumes[0].volumeUsd;
+  }, [volumes, volumeLoaded]);
+
   const component = (() => {
     if (handleDeprecated) {
       return (
@@ -158,6 +197,11 @@ function TradePageInner() {
     setCustomMarkets(newCustomMarkets);
   };
 
+  const getChangeColor = () => {
+    if (isNullOrUndefined(dayChange)) return '#FFF';
+    return dayChange! >= 0  ? '#0ee9a7' : '#ff4747';
+  };
+
   return (
     <>
       <CustomMarketDialog
@@ -187,28 +231,59 @@ function TradePageInner() {
             /> 
           </Col>
           <Col>
-            {<span style={{fontSize: '22px'}}>${markPrice} USDC</span>}
+            {<span style={{ fontSize: '22px' }}>${markPrice}</span>}
           </Col>
-          <Col flex='auto'>
+          <Col flex="auto">
             <Row
               align="middle"
               style={{ paddingLeft: 5, paddingRight: 5 }}
               gutter={16}
             >
               <Col>
-                {
+                <div>
                   <div>
-                    <div><small style={{color: '#ABABAB'}}>24hr Change</small></div>
-                    <div><small><b>-</b></small></div> 
+                    <small style={{ color: '#ABABAB' }}>24hr Change</small>
                   </div>
-                }
+                  <div>
+                    <small>
+                      <b
+                        style={{
+                          color: getChangeColor(),
+                        }}
+                      >
+                        {!isNullOrUndefined(dayChange)
+                          ? dayChange!.toFixed(2)
+                          : '-'}
+                        {change24HourPercent && (
+                          <span>
+                            {' '}
+                            {dayChange! >= 0 ? '+' : ''}
+                            {change24HourPercent.toFixed(2)}%
+                          </span>
+                        )}
+                      </b>
+                    </small>
+                  </div>
+                </div>
               </Col>
-              
+
               <Col>
                 {
                   <div>
-                    <div><small style={{color: '#ABABAB'}}>24hr Volume ({quoteCurrency})</small></div>
-                    <div><small><b>-</b></small></div> 
+                    <div>
+                      <small style={{ color: '#ABABAB' }}>
+                        24hr Volume ({quoteCurrency})
+                      </small>
+                    </div>
+                    <div>
+                      <small>
+                        <b>
+                          {!isNullOrUndefined(volumeChange)
+                            ? volumeChange!.toFixed(2)
+                            : '-'}
+                        </b>
+                      </small>
+                    </div>
                   </div>
                 }
               </Col>
@@ -322,7 +397,7 @@ function MarketSelector({
               ? 1
               : 0,
           )
-          .map(({ address, name, deprecated , symbol1}, i) => (
+          .map(({ address, name, deprecated, symbol1 }, i) => (
             <Option
               value={address.toBase58()}
               key={nanoid()}
@@ -332,7 +407,12 @@ function MarketSelector({
                 backgroundColor: i % 2 === 0 ? 'rgb(39, 44, 61)' : null,
               }}
             >
-              {<span><img src={symbol1} width="20px" height="18px" /></span>} {name} {deprecated ? ' (Deprecated)' : null}
+              {
+                <span>
+                  <img src={symbol1} width="20px" height="18px" />
+                </span>
+              }{' '}
+              {name} {deprecated ? ' (Deprecated)' : null}
             </Option>
           ))}
       </OptGroup>
@@ -364,14 +444,14 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
         }}
       >
         <Col flex={'auto'} style={{ height: '100%', display: 'flex' }}>
-          <TVChartContainer/>
+          <TVChartContainer />
         </Col>
         <Col flex={'450px'} style={{ height: '100%' }}>
           <Orderbook smallScreen={false} onPrice={onPrice} onSize={onSize} />
-         
+
           <TradesTable smallScreen={false} />
         </Col>
-    <Col
+        <Col
           flex="450px"
           style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
         >
@@ -389,23 +469,19 @@ const RenderNormal = ({ onChangeOrderRef, onPrice, onSize }) => {
 const RenderSmall = ({ onChangeOrderRef, onPrice, onSize }) => {
   return (
     <>
-      <Row
-      >
-        
+      <Row>
         <Col flex="auto" style={{ height: '100%' }}>
-          <TVChartContainer/>
+          <TVChartContainer />
         </Col>
         <Col
           className="tradetabletwo"
           flex="410px"
           style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
         >
-
           <TradesTable smallScreen={true} />
         </Col>
       </Row>
       <Row className="tradepagerowtwo">
-      
         <Col flex="33.3333%" style={{ height: '100%' }}>
           <StandaloneBalancesDisplay />
         </Col>
@@ -430,7 +506,7 @@ const RenderSmaller = ({ onChangeOrderRef, onPrice, onSize }) => {
     <>
       <Row>
         <Col flex="auto" style={{ height: '100%' }}>
-          <TVChartContainer/>
+          <TVChartContainer />
         </Col>
       </Row>
       <Row className="tradepagerowtwosmaller">
@@ -441,8 +517,7 @@ const RenderSmaller = ({ onChangeOrderRef, onPrice, onSize }) => {
           <StandaloneBalancesDisplay />
         </Col>
       </Row>
-      <Row className="tradepagerowthreesmaller"
-      >
+      <Row className="tradepagerowthreesmaller">
         <Col xs={24} sm={12} style={{ height: '100%', display: 'flex' }}>
           <Orderbook smallScreen={true} onPrice={onPrice} onSize={onSize} />
         </Col>
