@@ -1,5 +1,5 @@
-import {Button as AntdButton, Input, Radio, Slider, Switch} from 'antd';
-import React, {useEffect, useState} from 'react';
+import { Button as AntdButton, Input, Radio, Slider, Switch } from 'antd';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   useFeeDiscountKeys,
@@ -12,21 +12,30 @@ import {
   useSelectedQuoteCurrencyAccount,
   useSelectedQuoteCurrencyBalances,
 } from '../utils/markets';
-import {useWallet} from '../utils/wallet';
-import {notify} from '../utils/notifications';
-import {floorToDecimal, getDecimalCount, roundToDecimal,} from '../utils/utils';
-import {useSendConnection} from '../utils/connection';
+import { useWallet } from '../utils/wallet';
+import { notify } from '../utils/notifications';
+import {
+  floorToDecimal,
+  getDecimalCount,
+  roundToDecimal,
+} from '../utils/utils';
+import { useSendConnection } from '../utils/connection';
 import FloatingElement from './layout/FloatingElement';
-import {getUnixTs, placeOrder} from '../utils/send';
-import {SwitchChangeEventHandler} from 'antd/es/switch';
-import {refreshCache} from '../utils/fetch-loop';
+import { getUnixTs, placeOrder } from '../utils/send';
+import { SwitchChangeEventHandler } from 'antd/es/switch';
+import { refreshCache } from '../utils/fetch-loop';
 import tuple from 'immutable-tuple';
 
 const Button = styled(AntdButton)`
   margin: 0px 0px 0px 0px;
-  background: #E74C3C;
-  border-color: ${(props) => props.sellOrBuy === 'sell' ? '#E74C3C' : '#27AE60'};
-  border-radius: 0px;
+  background: #df3e3e;
+  border-color: #df3e3e;
+  border-radius: 6px;
+
+  &:hover {
+    color: #21073c;
+    background-color: #851cef;
+  }
 `;
 
 const RadioButton = styled(Radio.Button)`
@@ -37,18 +46,22 @@ const RadioButton = styled(Radio.Button)`
   font-weight: 700;
 
   &:hover {
-    color: #21073C;
+    color: #21073c;
   }
 `;
 
 const SellButton = styled(RadioButton)`
-  background: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
-  border-color: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
+  background: ${(props) =>
+    props.side === 'sell' ? '#DF3E3E' : '#282F3F'} !important;
+  border-color: ${(props) =>
+    props.side === 'sell' ? '#DF3E3E' : '#282F3F'} !important;
 `;
 
 const BuyButton = styled(RadioButton)`
-  background: ${(props) =>  props.side === 'buy' ? '#099268' : '#282F3F' } !important;
-  border-color: ${(props) =>  props.side === 'buy' ? '#099268' : '#282F3F' } !important;
+  background: ${(props) =>
+    props.side === 'buy' ? '#099268' : '#282F3F'} !important;
+  border-color: ${(props) =>
+    props.side === 'buy' ? '#099268' : '#282F3F'} !important;
 `;
 
 const sliderMarks = {
@@ -291,9 +304,14 @@ export default function TradeForm({
 
   return (
     <FloatingElement
-      style={{ display: 'flex', minHeight: 332, flexDirection: 'column', ...style }}
+      style={{
+        display: 'flex',
+        minHeight: 332,
+        flexDirection: 'column',
+        ...style,
+      }}
     >
-      <div style={{ flex: 1 ,marginTop:0}}>
+      <div style={{ flex: 1, marginTop: 0 }}>
         <Radio.Group
           onChange={(e) => setSide(e.target.value)}
           value={side}
@@ -311,11 +329,15 @@ export default function TradeForm({
           </SellButton>
         </Radio.Group>
         <Input
-          style={{ textAlign: 'right', border: "1px solid #851CEF  ", borderRadius: '4px', marginTop:10, background: '#212535' }}
-          addonBefore={<div style={{ width: '30px', }}>Price</div>}
-          suffix={
-            <span style={{ fontSize: 12}}>{quoteCurrency}</span>
-          }
+          style={{
+            textAlign: 'right',
+            border: '1px solid #851CEF',
+            borderRadius: '4px',
+            marginTop: 10,
+            background: '#212535',
+          }}
+          addonBefore={<div style={{ width: '30px' }}>Price</div>}
+          suffix={<span style={{ fontSize: 12 }}>{quoteCurrency}</span>}
           value={price}
           type="number"
           step={market?.tickSize || 1}
@@ -323,23 +345,32 @@ export default function TradeForm({
         />
         <Input.Group compact style={{ paddingBottom: 10, paddingTop: 10 }}>
           <Input
-            style={{ width: 'calc(50% + 30px)', textAlign: 'right', border: "1px solid #851CEF ", borderRadius: '4px', marginTop:10, background: '#212535' }}
-            addonBefore={<div style={{ width: '30px', }}>Size</div>}
-            suffix={
-              <span style={{ fontSize: 12}}>{baseCurrency}</span>
-            }
+            style={{
+              width: 'calc(50% + 30px)',
+              textAlign: 'right',
+              border: '1px solid #851CEF',
+              borderRadius: '4px',
+              marginTop: 10,
+              background: '#212535',
+            }}
+            addonBefore={<div style={{ width: '30px' }}>Size</div>}
+            suffix={<span style={{ fontSize: 12 }}>{baseCurrency}</span>}
             value={baseSize}
             type="number"
             step={market?.minOrderSize || 1}
             onChange={(e) => onSetBaseSize(parseFloat(e.target.value))}
           />
           <Input
-            style={{ width: 'calc(50% - 30px)', textAlign: 'right', border: "1px solid #851CEF   ", borderRadius: '4px' ,paddingBottom: '6px', marginTop:10, background: '#212535' }}
-            suffix={
-              <span style={{ fontSize: 12}}>
-                {quoteCurrency}
-              </span>
-            }
+            style={{
+              width: 'calc(50% - 30px)',
+              textAlign: 'right',
+              border: '1px solid #851CEF',
+              borderRadius: '4px',
+              paddingBottom: '6px',
+              marginTop: 10,
+              background: '#212535',
+            }}
+            suffix={<span style={{ fontSize: 12 }}>{quoteCurrency}</span>}
             value={quoteSize}
             type="number"
             step={market?.minOrderSize || 1}
@@ -368,7 +399,6 @@ export default function TradeForm({
           disabled={!price || !baseSize}
           onClick={onSubmit}
           block
-          sellOrBuy="buy"
           type="primary"
           size="large"
           loading={submitting}
@@ -380,7 +410,6 @@ export default function TradeForm({
           disabled={!price || !baseSize}
           onClick={onSubmit}
           block
-          sellOrBuy="buy"
           type="primary"
           size="large"
           loading={submitting}
