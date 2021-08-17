@@ -272,7 +272,7 @@ function TradePageInner() {
                       <small>
                         <b>
                           {!isNullOrUndefined(volumeChange)
-                            ? volumeChange!.toFixed(2)
+                            ? volumeChange!.toLocaleString(undefined,{maximumFractionDigits:2})
                             : '-'}
                         </b>
                       </small>
