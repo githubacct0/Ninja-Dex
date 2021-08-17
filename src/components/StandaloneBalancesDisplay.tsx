@@ -1,5 +1,5 @@
-import {Button, Col, Divider, Popover, Row} from 'antd';
-import React, {useState} from 'react';
+import { Button, Col, Divider, Popover, Row } from 'antd';
+import React, { useState } from 'react';
 import FloatingElement from './layout/FloatingElement';
 import styled from 'styled-components';
 import {
@@ -12,19 +12,19 @@ import {
   getSymbol,
 } from '../utils/markets';
 import DepositDialog from './DepositDialog';
-import {useWallet} from '../utils/wallet';
+import { useWallet } from '../utils/wallet';
 import logo from '../assets/discord.svg';
 import Link from './Link';
-import {settleFunds} from '../utils/send';
-import {useSendConnection} from '../utils/connection';
-import {notify} from '../utils/notifications';
-import {Balances} from '../utils/types';
+import { settleFunds } from '../utils/send';
+import { useSendConnection } from '../utils/connection';
+import { notify } from '../utils/notifications';
+import { Balances } from '../utils/types';
 import StandaloneTokenAccountsSelect from './StandaloneTokenAccountSelect';
 import LinkAddress from './LinkAddress';
-import {InfoCircleOutlined} from '@ant-design/icons';
-import {useInterval} from "../utils/useInterval";
-import {useLocalStorageState} from "../utils/utils";
-import { AUTO_SETTLE_DISABLED_OVERRIDE } from "../utils/preferences";
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { useInterval } from '../utils/useInterval';
+import { useLocalStorageState } from '../utils/utils';
+import { AUTO_SETTLE_DISABLED_OVERRIDE } from '../utils/preferences';
 
 const RowBox = styled(Row)`
   padding-bottom: 0px;
@@ -35,10 +35,18 @@ const Tip = styled.p`
   padding-top: 5px;
 `;
 
-const ActionButton = styled(Button)`
-  color: #851CEF;
-  background-color: #851CEF;
+const SettleButton = styled(Button)`
+  background-color: #851cef;
+  border-color: #851cef;
   border-width: 2px;
+  border-radius: 6px;
+  color: white;
+
+  &:hover {
+    color: #21073c;
+    background-color: #851cef;
+    border-color: #851cef;
+  }
 `;
 
 export default function StandaloneBalancesDisplay() {
@@ -56,10 +64,7 @@ export default function StandaloneBalancesDisplay() {
     balances && balances.find((b) => b.coin === baseCurrency);
   const quoteCurrencyBalances =
     balances && balances.find((b) => b.coin === quoteCurrency);
-  const [autoSettleEnabled] = useLocalStorageState(
-    'autoSettleEnabled',
-    true,
-  );
+  const [autoSettleEnabled] = useLocalStorageState('autoSettleEnabled', true);
   const [lastSettledAt, setLastSettledAt] = useState<number>(0);
 
   async function onSettleFunds() {
@@ -125,10 +130,21 @@ export default function StandaloneBalancesDisplay() {
 
   useInterval(() => {
     const autoSettle = async () => {
-      if (AUTO_SETTLE_DISABLED_OVERRIDE || !wallet || !market || !openOrdersAccount || !baseCurrencyAccount || !quoteCurrencyAccount || !autoSettleEnabled) {
+      if (
+        AUTO_SETTLE_DISABLED_OVERRIDE ||
+        !wallet ||
+        !market ||
+        !openOrdersAccount ||
+        !baseCurrencyAccount ||
+        !quoteCurrencyAccount ||
+        !autoSettleEnabled
+      ) {
         return;
       }
-      if (!baseCurrencyBalances?.unsettled && !quoteCurrencyBalances?.unsettled) {
+      if (
+        !baseCurrencyBalances?.unsettled &&
+        !quoteCurrencyBalances?.unsettled
+      ) {
         return;
       }
       if (Date.now() - lastSettledAt < 15000) {
@@ -151,12 +167,7 @@ export default function StandaloneBalancesDisplay() {
       }
       console.log('Finished settling funds.');
     };
-    (
-      connected &&
-      wallet?.autoApprove &&
-      autoSettleEnabled &&
-      autoSettle()
-    );
+    connected && wallet?.autoApprove && autoSettleEnabled && autoSettle();
   }, 1000);
 
   const formattedBalances: [
@@ -182,14 +193,27 @@ export default function StandaloneBalancesDisplay() {
     ],
   ];
   return (
-    <FloatingElement style={{ flex: 1, paddingTop: 0}}>
+    <FloatingElement style={{ flex: 1, paddingTop: 0 }}>
       {formattedBalances.map(
         ([currency, balances, baseOrQuote, mint, symbol1], index) => (
           <React.Fragment key={index}>
-
             <Divider style={{ borderColor: 'white' }}>
-            
-              {<img src={symbol1?symbol1:logo} style={{height: '30px', padding: '0px', border: '2px solid #851CEF', borderRadius:'50%'}}/>}{<span style={{paddingLeft: '15px'}}></span>}{currency}{<span className="text-white" style={{paddingLeft: '5px'}}></span>}
+              <img
+                src={symbol1 ? symbol1 : logo}
+                style={{
+                  height: '30px',
+                  padding: '0px',
+                  border: '2px solid #851CEF',
+                  borderRadius: '50%',
+                }}
+              />
+              <span style={{ paddingLeft: '15px' }}></span>
+              {currency}
+              <span
+                className="text-white"
+                style={{ paddingLeft: '5px' }}
+              ></span>
+
               {mint && (
                 <Popover
                   content={<LinkAddress address={mint} />}
@@ -197,13 +221,11 @@ export default function StandaloneBalancesDisplay() {
                   title="Token mint address"
                   trigger="hover"
                 >
-                    <InfoCircleOutlined style={{color: '#851CEF'}} />
-					
+                  <InfoCircleOutlined style={{ color: '#851CEF' }} />
                 </Popover>
               )}
-
             </Divider>
-           
+
             {connected && (
               <RowBox align="middle" style={{ paddingBottom: 10 }}>
                 <StandaloneTokenAccountsSelect
@@ -215,30 +237,43 @@ export default function StandaloneBalancesDisplay() {
                 />
               </RowBox>
             )}
-           
+
             <RowBox
               align="middle"
               justify="space-between"
-              style={{ marginBottom: '5px', padding:'5px 20px 5px 20px', borderRadius: '6px',color:'#fff', background: '#282F3F'}}
+              style={{
+                marginBottom: '5px',
+                padding: '5px 20px 5px 20px',
+                borderRadius: '6px',
+                color: '#fff',
+                background: '#282F3F',
+              }}
             >
               <Col>Wallet balance:</Col>
               <Col>{balances && balances.wallet}</Col>
             </RowBox>
-           
+
             <RowBox
               align="middle"
               justify="space-between"
-              style={{ marginBottom: '20px', padding:'5px 20px 5px 20px', borderRadius: '6px',color:'#fff', background: '#282F3F'}}
+              style={{
+                marginBottom: '20px',
+                padding: '5px 20px 5px 20px',
+                borderRadius: '6px',
+                color: '#fff',
+                background: '#282F3F',
+              }}
             >
               <Col>Unsettled balance:</Col>
               <Col>{balances && balances.unsettled}</Col>
             </RowBox>
             {(() => {
               switch (index) {
-                case 1: return(
-                          <>
-                            <RowBox>
-                              {/*<Col style={{ width: 130 }}>
+                case 1:
+                  return (
+                    <>
+                      <RowBox>
+                        {/*<Col style={{ width: 130 }}>
                                 <ActionButton
                                   block
                                   size="large"
@@ -248,22 +283,26 @@ export default function StandaloneBalancesDisplay() {
                                   Deposit
                                 </ActionButton>
                               </Col>*/}
-                              <Col style={{ width: '100%'}}>
-                                <ActionButton block size="large" onClick={onSettleFunds} style={{backgroundColor: '#851CEF', borderRadius: '6px',color:'white'}}>
-                                  Settle all funds
-                                </ActionButton>
-                              </Col>
-                            </RowBox>
-                            {/*<Tip>
+                        <Col style={{ width: '100%' }}>
+                          <SettleButton
+                            block
+                            size="large"
+                            onClick={onSettleFunds}
+                            style={{}}
+                          >
+                            Settle all funds
+                          </SettleButton>
+                        </Col>
+                      </RowBox>
+                      {/*<Tip>
                               All deposits go to your{' '}
                               <Link external to={providerUrl}>
                                 {providerName}
                               </Link>{' '}
                               wallet
                             </Tip>*/}
-                          </>
-                        );
-                
+                    </>
+                  );
               }
             })()}
           </React.Fragment>
@@ -274,6 +313,5 @@ export default function StandaloneBalancesDisplay() {
         onClose={() => setBaseOrQuote('')}
       />
     </FloatingElement>
-
   );
 }
