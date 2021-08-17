@@ -228,7 +228,7 @@ function TradePageInner() {
              <PlusCircleOutlined
               style={{ color: '#2D81FF' }}
               onClick={() => setAddMarketVisible(true)}
-            /> 
+            />
           </Col>
           <Col>
             {<span style={{ fontSize: '22px' }}>${markPrice}</span>}
@@ -279,7 +279,7 @@ function TradePageInner() {
                       <small>
                         <b>
                           {!isNullOrUndefined(volumeChange)
-                            ? volumeChange!.toFixed(2)
+                            ? volumeChange!.toLocaleString(undefined,{maximumFractionDigits:2})
                             : '-'}
                         </b>
                       </small>
