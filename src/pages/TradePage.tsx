@@ -52,9 +52,8 @@ const AddLink = styled.a`
   padding: 5px;
   color: #ffffff;
   &:hover {
-    color:  #851CEF;
+    color: #851cef;
   }
-  
 `;
 export default function TradePage() {
   const { marketAddress } = useParams();
@@ -96,7 +95,6 @@ function TradePageInner() {
     width: window.innerWidth,
   });
   const markPrice = useMarkPrice();
-  const [change24HourPercent, setChange24HourPercent] = useState<number>();
   const [trades, tradesLoaded] = useBonfidaTrades();
   const [volumes, volumeLoaded] = useBonfidaVolumes();
 
@@ -133,7 +131,7 @@ function TradePageInner() {
     ),
   };
 
-  const dayChange = useMemo(() => {
+  const dayPercentChange = useMemo(() => {
     if (!tradesLoaded || !trades || trades.length == 0) return;
 
     const compareTime = moment().subtract(1, 'days').unix();
@@ -150,8 +148,7 @@ function TradePageInner() {
     const yesterdayValue = trades[minIndex].price;
     const change = Number(markPrice! - yesterdayValue);
     const percentChange = (change * 100) / yesterdayValue;
-    setChange24HourPercent(percentChange);
-    return change;
+    return percentChange;
   }, [tradesLoaded, trades, markPrice]);
 
   const volumeChange = useMemo(() => {
@@ -198,8 +195,8 @@ function TradePageInner() {
   };
 
   const getChangeColor = () => {
-    if (isNullOrUndefined(dayChange)) return '#FFF';
-    return dayChange! >= 0  ? '#0ee9a7' : '#ff4747';
+    if (isNullOrUndefined(dayPercentChange)) return '#FFF';
+    return dayPercentChange! >= 0 ? '#0ee9a7' : '#ff4747';
   };
 
   return (
@@ -225,14 +222,12 @@ function TradePageInner() {
             />
           </Col>
           <Col>
-             <PlusCircleOutlined
+            <PlusCircleOutlined
               style={{ color: '#2D81FF' }}
               onClick={() => setAddMarketVisible(true)}
             />
           </Col>
-          <Col>
-            {<span style={{ fontSize: '22px' }}>${markPrice}</span>}
-          </Col>
+          <Col>{<span style={{ fontSize: '22px' }}>${markPrice}</span>}</Col>
           <Col flex="auto">
             <Row
               align="middle"
@@ -251,15 +246,13 @@ function TradePageInner() {
                           color: getChangeColor(),
                         }}
                       >
-                        {!isNullOrUndefined(dayChange)
-                          ? dayChange!.toFixed(2)
-                          : '-'}
-                        {change24HourPercent && (
+                        {!isNullOrUndefined(dayPercentChange) ? (
                           <span>
-                            {' '}
-                            {dayChange! >= 0 ? '+' : ''}
-                            {change24HourPercent.toFixed(2)}%
+                            {dayPercentChange! >= 0 ? '+' : ''}
+                            {dayPercentChange!.toFixed(2)}%
                           </span>
+                        ) : (
+                          '-'
                         )}
                       </b>
                     </small>
