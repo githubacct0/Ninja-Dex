@@ -44,6 +44,9 @@ const RadioButton = styled(Radio.Button)`
 const SellButton = styled(RadioButton)`
   background: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
   border-color: ${(props) => props.side === 'sell' ? '#DF3E3E': '#282F3F'} !important;
+  &::before{
+    content: none !important;
+  }
 `;
 
 const BuyButton = styled(RadioButton)`
@@ -352,7 +355,7 @@ export default function TradeForm({
           marks={sliderMarks}
           onChange={onSliderChange}
         />
-        <div style={{ paddingTop: 10 }}>
+        <div style={{ paddingTop: 10, marginBottom: 20 }}>
           {'POST '}
           <Switch
             checked={postOnly}
