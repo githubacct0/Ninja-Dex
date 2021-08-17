@@ -28,8 +28,8 @@ import tuple from 'immutable-tuple';
 
 const Button = styled(AntdButton)`
   margin: 0px 0px 0px 0px;
-  background: #df3e3e;
-  border-color: #df3e3e;
+  background: ${props => props.color ? props.color: '#df3e3e'};
+  border-color: ${props => props.color ? props.color: '#df3e3e'};
   border-radius: 6px;
 
   &:hover {
@@ -401,6 +401,7 @@ export default function TradeForm({
           disabled={!price || !baseSize}
           onClick={onSubmit}
           block
+          color="#099268"
           type="primary"
           size="large"
           loading={submitting}
@@ -411,6 +412,7 @@ export default function TradeForm({
         <Button
           disabled={!price || !baseSize}
           onClick={onSubmit}
+          color="#df3e3e"
           block
           type="primary"
           size="large"
