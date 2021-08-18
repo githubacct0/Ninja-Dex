@@ -1,18 +1,37 @@
-import {Market, MARKETS, OpenOrders, Orderbook, TOKEN_MINTS, TokenInstructions,} from '@project-serum/serum';
-import {PublicKey} from '@solana/web3.js';
-import React, {useContext, useEffect, useState} from 'react';
-import {divideBnToNumber, floorToDecimal, getTokenMultiplierFromDecimals, sleep, useLocalStorageState,} from './utils';
-import {refreshCache, useAsyncData} from './fetch-loop';
-import {useAccountData, useAccountInfo, useConnection} from './connection';
-import {useWallet} from './wallet';
+import {
+  Market,
+  MARKETS,
+  OpenOrders,
+  Orderbook,
+  TOKEN_MINTS,
+  TokenInstructions,
+} from '@project-serum/serum';
+import { PublicKey } from '@solana/web3.js';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  divideBnToNumber,
+  floorToDecimal,
+  getTokenMultiplierFromDecimals,
+  sleep,
+  useLocalStorageState,
+} from './utils';
+import { refreshCache, useAsyncData } from './fetch-loop';
+import { useAccountData, useAccountInfo, useConnection } from './connection';
+import { useWallet } from './wallet';
 import tuple from 'immutable-tuple';
-import {notify} from './notifications';
+import { notify } from './notifications';
 import BN from 'bn.js';
-import {getTokenAccountInfo, parseTokenAccountData, useMintInfos,} from './tokens';
+import {
+  getTokenAccountInfo,
+  parseTokenAccountData,
+  useMintInfos,
+} from './tokens';
 import {
   Balances,
+  BonfidaVolume,
   CustomMarketInfo,
   DeprecatedOpenOrdersBalances,
+  DexLabVolume,
   FullMarketInfo,
   MarketContextValues,
   MarketInfo,
@@ -20,9 +39,10 @@ import {
   SelectedTokenAccounts,
   TokenAccount,
 } from './types';
-import {WRAPPED_SOL_MINT} from '@project-serum/serum/lib/token-instructions';
-import {Order} from '@project-serum/serum/lib/market';
+import { WRAPPED_SOL_MINT } from '@project-serum/serum/lib/token-instructions';
+import { Order } from '@project-serum/serum/lib/market';
 import BonfidaApi from './bonfidaConnector';
+import DexLabApi from './dexLabConnector';
 
 // Used in debugging, should be false in production
 const _IGNORE_DEPRECATED = false;
@@ -32,12 +52,17 @@ export const USE_MARKETS: MarketInfo[] = _IGNORE_DEPRECATED
   : MARKETS;
 
 export function useMarketsList() {
-  return USE_MARKETS.filter(({ name, deprecated }) => !deprecated && !process.env.REACT_APP_EXCLUDE_MARKETS?.includes(name));
+  return USE_MARKETS.filter(
+    ({ name, deprecated }) =>
+      !deprecated && !process.env.REACT_APP_EXCLUDE_MARKETS?.includes(name),
+  );
 }
 export function getSymbol(marketAddress) {
   const mee = marketAddress && new PublicKey(marketAddress);
   const marketInfos = MARKETS.find(
-  ({ address,name,symbol1,symbol2 }) => address?.toBase58() === mee?.toBase58());
+    ({ address, name, symbol1, symbol2 }) =>
+      address?.toBase58() === mee?.toBase58(),
+  );
   // console.log(marketInfos?.symbol2);
   return marketInfos;
 }
@@ -365,7 +390,7 @@ export function useBonfidaTrades() {
   const marketName = baseCurrency! + quoteCurrency!;
   const isNinja = baseCurrency == NINJA_TOKEN || quoteCurrency == NINJA_TOKEN;
 
-  const params = isNinja ? marketAddress : marketName
+  const params = isNinja ? marketAddress : marketName;
 
   async function getRecentNinjaTrades() {
     if (!params) {
@@ -389,19 +414,19 @@ export function useBonfidaTrades() {
   );
 }
 
-export function useBonfidaVolumes() {
+export function useVolumes() {
   const { market, baseCurrency, quoteCurrency } = useMarket();
   const marketAddress = market?.address.toBase58();
   const marketName = baseCurrency! + quoteCurrency!;
   const isNinja = baseCurrency == NINJA_TOKEN || quoteCurrency == NINJA_TOKEN;
 
-  const params = isNinja ? marketAddress : marketName
+  const params = isNinja ? marketAddress : marketName;
 
   async function get24HourNinjaVolumes() {
     if (!params) {
       return null;
     }
-    return await BonfidaApi.get24HourNinjaVolumes(params);
+    return await DexLabApi.get24HourVolumes(params);
   }
 
   async function get24HourVolumes() {
@@ -411,7 +436,7 @@ export function useBonfidaVolumes() {
     return await BonfidaApi.get24HourVolumes(params);
   }
 
-  return useAsyncData(
+  return useAsyncData<BonfidaVolume[] | DexLabVolume | null>(
     isNinja ? get24HourNinjaVolumes : get24HourVolumes,
     tuple('get24HourVolumes', params),
     { refreshInterval: _SLOW_REFRESH_INTERVAL },
@@ -1142,7 +1167,7 @@ export function getMarketInfos(
     programId: new PublicKey(m.programId),
     deprecated: false,
     symbol1: '',
-    symbol2: ''
+    symbol2: '',
   }));
 
   return [...customMarketsInfo, ...USE_MARKETS];
@@ -1219,7 +1244,12 @@ export function getExpectedFillPrice(
   return formattedPrice;
 }
 
-export function useCurrentlyAutoSettling(): [boolean, (currentlyAutoSettling: boolean) => void] {
-  const [currentlyAutoSettling, setCurrentlyAutosettling] = useState<boolean>(false);
+export function useCurrentlyAutoSettling(): [
+  boolean,
+  (currentlyAutoSettling: boolean) => void,
+] {
+  const [currentlyAutoSettling, setCurrentlyAutosettling] = useState<boolean>(
+    false,
+  );
   return [currentlyAutoSettling, setCurrentlyAutosettling];
 }
