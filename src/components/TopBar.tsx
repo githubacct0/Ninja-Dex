@@ -1,9 +1,4 @@
-import {
-  InfoCircleOutlined,
-  PlusCircleOutlined,
-  SettingOutlined,
-  SettingFilled,
-} from '@ant-design/icons';
+import { SettingFilled } from '@ant-design/icons';
 import { Button, Col, Menu, Popover, Row, Select } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -17,13 +12,13 @@ import { EndpointInfo } from '../utils/types';
 import { notify } from '../utils/notifications';
 import { Connection } from '@solana/web3.js';
 import WalletConnect from './WalletConnect';
-import AppSearch from './AppSearch';
 import { getTradePageUrl } from '../utils/markets';
 
 const Rows = styled(Row)`
-  background-color: #1F2331;
+  background-color: #1f2331;
   padding: 0px 10px;
 `;
+
 const LogoWrapper = styled.div`
   text-align: center;
   align-items: center;
@@ -35,27 +30,31 @@ const LogoWrapper = styled.div`
     height: 50px;
   }
   @media only screen and (max-width: 786px) {
-float:left;
-img {
-  height: 35px;
-}
+    float: left;
+    img {
+      height: 35px;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    display: flex !important;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
   }
 `;
 const WalletConnectmobile = styled.div`
-display:none;
-@media only screen and (max-width: 786px) {
-  display:flex;
-  float:right;
-  margin:20px;
-
-    }
-    
+  display: none;
+  @media only screen and (max-width: 786px) {
+    display: flex;
+    float: right;
+    margin: 20px;
+  }
 `;
 const WalletConnectdesktop = styled.div`
-display:flex;
-@media only screen and (max-width: 786px) {
-  display:none
-}
+  display: flex;
+  @media only screen and (max-width: 786px) {
+    display: none;
+  }
 `;
 
 const EXTERNAL_LINKS = {
@@ -148,10 +147,10 @@ export default function TopBar() {
     ? location.pathname
     : getTradePageUrl();
   let patth = location.pathname;
-  if(location.pathname.split('/')[1] == "dexlearn"){
-    patth = '/dexlearn'
+  if (location.pathname.split('/')[1] == 'dexlearn') {
+    patth = '/dexlearn';
   }
-  
+
   return (
     <>
       <CustomClusterEndpointDialog
@@ -160,14 +159,15 @@ export default function TopBar() {
         onAddCustomEndpoint={onAddCustomEndpoint}
         onClose={() => setAddEndpointVisible(false)}
       />
-      <Rows gutter={[0, 6]} >
+      <Rows gutter={[0, 6]}>
         <Col xl={4} lg={5} md={6} sm={8} xs={24}>
           <LogoWrapper onClick={() => history.push(tradePageUrl)}>
             <img src={logo} alt="" />
-            <WalletConnectmobile>  <WalletConnect /></WalletConnectmobile>
-          
+            <WalletConnectmobile>
+              {' '}
+              <WalletConnect />
+            </WalletConnectmobile>
           </LogoWrapper>
-          
         </Col>
         <Col xl={17} lg={16} md={15} sm={13} xs={24}>
           <Menu
@@ -183,20 +183,34 @@ export default function TopBar() {
               flex: 1,
             }}
           >
-            <Menu.Item key={tradePageUrl} style={{ margin: '0 10px', fontWeight: 700, fontSize: '22x'}}>
+            <Menu.Item
+              key={tradePageUrl}
+              style={{ margin: '0 10px', fontWeight: 700, fontSize: '22x' }}
+            >
               <span className="titlemk">Trade</span>
             </Menu.Item>
-            {connected && (!searchFocussed || location.pathname === '/balances') && (
-              <Menu.Item key="/balances" style={{ margin: '0 10px', fontWeight: 700, fontSize: '22px'}}>
-                <span className="titlemk">Balances</span>
-              </Menu.Item>
-            )}
+            {connected &&
+              (!searchFocussed || location.pathname === '/balances') && (
+                <Menu.Item
+                  key="/balances"
+                  style={{
+                    margin: '0 10px',
+                    fontWeight: 700,
+                    fontSize: '22px',
+                  }}
+                >
+                  <span className="titlemk">Balances</span>
+                </Menu.Item>
+              )}
             {connected && (!searchFocussed || location.pathname === '/orders') && (
-              <Menu.Item key="/orders" style={{ margin: '0 10px', fontWeight: 700, fontSize: '22px'}}>
+              <Menu.Item
+                key="/orders"
+                style={{ margin: '0 10px', fontWeight: 700, fontSize: '22px' }}
+              >
                 <span className="titlemk">Orders</span>
               </Menu.Item>
             )}
- 
+
             <Menu.SubMenu
               title="Learn"
               onTitleClick={() =>
@@ -205,7 +219,7 @@ export default function TopBar() {
               style={{ margin: '0 10px', fontWeight: 700, fontSize: '22px' }}
             >
               <Menu.Item key="/sol">
-                      <a
+                <a
                   href={EXTERNAL_LINKS['/sol']}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -249,29 +263,52 @@ export default function TopBar() {
                   Setting up NINJA-BOT
                 </a>
               </Menu.Item>
-            </Menu.SubMenu>		
-			
+            </Menu.SubMenu>
           </Menu>
-	
         </Col>
-        <Col xl={3} lg={3} md={3} sm={3} xs={24} className="endmenu" style={{display: 'flex'}}>
+        <Col
+          xl={3}
+          lg={3}
+          md={3}
+          sm={3}
+          xs={24}
+          className="endmenu"
+          style={{ display: 'flex' }}
+        >
           {connected && (
-            <div style={{alignSelf: 'center'}}>
+            <div style={{ alignSelf: 'center' }}>
               <Popover
                 content={<Settings autoApprove={wallet?.autoApprove} />}
                 placement="bottomRight"
                 title="Settings"
                 trigger="click"
               >
-                <Button style={{ marginRight: 20 , background: '#FFFFFF', color: 'transparent', padding: '5px', display: 'flex', alignItems: 'center', borderRadius: '4px'}}>
-                  <SettingFilled style={{color: 'transparent', fontSize: '22px', lineHeight: '0px'}} />
+                <Button
+                  style={{
+                    marginRight: 20,
+                    background: '#FFFFFF',
+                    color: 'transparent',
+                    padding: '5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <SettingFilled
+                    style={{
+                      color: 'transparent',
+                      fontSize: '22px',
+                      lineHeight: '0px',
+                    }}
+                  />
                 </Button>
               </Popover>
             </div>
           )}
-          <div style={{ alignSelf: 'center'}}>
-            <WalletConnectdesktop><WalletConnect /></WalletConnectdesktop>
-            
+          <div style={{ alignSelf: 'center' }}>
+            <WalletConnectdesktop>
+              <WalletConnect />
+            </WalletConnectdesktop>
           </div>
         </Col>
       </Rows>

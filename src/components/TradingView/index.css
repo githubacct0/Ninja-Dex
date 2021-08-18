@@ -29,8 +29,8 @@
   }
 }
 
-@media screen and (max-width: 574px) {
-  #tv_chart_container iframe {
-    margin-top: 22px !important;
+@media screen and (max-width: 600px) {
+  #tv_chart_container {
+    border-radius: 4px !important;
   }
 }
