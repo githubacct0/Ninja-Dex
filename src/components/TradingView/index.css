@@ -1,32 +1,36 @@
-
 #tv_chart_container {
   height: 100%;
   width: 100%;
   margin-top: 5px;
   border-radius: 25px;
-  border: 2px solid #851CEF;
+  border: 2px solid #851cef;
 }
 
-#tv_chart_container iframe{
+#tv_chart_container iframe {
   min-height: 550px !important;
 }
 
-
 @media screen and (min-width: 575px) {
-#tv_chart_container iframe{
-  border-radius: 10px;
-  min-height: 350px !important;
-  padding: 5px;
-}
+  #tv_chart_container iframe {
+    border-radius: 10px;
+    min-height: 350px !important;
+    padding: 5px;
+  }
 }
 @media screen and (min-width: 1000px) {
-  #tv_chart_container iframe{
+  #tv_chart_container iframe {
     min-height: 470px !important;
   }
 }
 
 @media screen and (min-width: 1450px) {
-  #tv_chart_container iframe{
+  #tv_chart_container iframe {
     min-height: 770px !important;
+  }
+}
+
+@media screen and (max-width: 574px) {
+  #tv_chart_container iframe {
+    margin-top: 22px !important;
   }
 }
