@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dropdown, Menu, Button as AntdButton } from 'antd';
 import styled from 'styled-components';
+import { isMobileOnly } from "react-device-detect";
+
 import { useWallet } from '../utils/wallet';
 import LinkAddress from './LinkAddress';
 import wallet_svg from '../assets/wallet.svg';
@@ -14,6 +16,10 @@ const Button = styled(AntdButton)`
   &:hover {
     color: ${(props) => (props.isConnectButton ? '#21073c' : '')};
   }
+  
+  & > img{
+    margin-top: ${(props) => ((props.isConnectButton && props.isMobileOnly) ? '-4px' : '')};
+  }
 `;
 
 const Container = styled.div`
@@ -22,6 +28,13 @@ const Container = styled.div`
   border-radius: 6px;
   min-height: 38px;
   align-items: baseline;
+`;
+
+const StyledDropdown = styled(Dropdown)`
+  top: ${(props) => props.isMobileOnly === true ? '2px' : ''};
+  & > img {
+    margin-top: ${(props) => props.isMobileOnly === true ? '-4px' : ''};;
+  }
 `;
 
 export default function WalletConnect() {
@@ -39,7 +52,7 @@ export default function WalletConnect() {
 
   return (
     <Container>
-      <Button isConnectButton onClick={connected ? disconnect : connect}>
+      <Button isConnectButton isMobileOnly={isMobileOnly} onClick={connected ? disconnect : connect}>
         <img src={wallet_svg} alt="" height="30px" />
         <span
           style={{ paddingLeft: '10px', paddingRight: '5', fontWeight: 'bold' }}
@@ -47,11 +60,11 @@ export default function WalletConnect() {
           {connected ? 'Disconnect' : 'Connect'}
         </span>
       </Button>
-      <Dropdown overlay={menu}>
+      <StyledDropdown isMobileOnly={isMobileOnly} overlay={menu}>
         <Button>
           <img src={arrow_bottom} alt="" height="20px" width="15px" />
         </Button>
-      </Dropdown>
+      </StyledDropdown>
     </Container>
   );
 }
