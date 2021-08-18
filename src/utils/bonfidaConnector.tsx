@@ -30,12 +30,6 @@ export default class BonfidaApi {
     return BonfidaApi.get(`trades/${marketName}`, true);
   }
 
-  static async get24HourNinjaVolumes(
-    marketName: string,
-  ): Promise<BonfidaVolume[] | null> {
-    return BonfidaApi.get(`volumes/${marketName}`);
-  }
-
   static async get24HourVolumes(
     marketName: string,
   ): Promise<BonfidaVolume[] | null> {

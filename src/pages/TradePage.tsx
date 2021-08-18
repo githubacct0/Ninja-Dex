@@ -20,7 +20,7 @@ import {
   useUnmigratedDeprecatedMarkets,
   useMarkPrice,
   useBonfidaTrades,
-  useBonfidaVolumes,
+  useVolumes,
 } from '../utils/markets';
 import TradeForm from '../components/TradeForm';
 import TradesTable from '../components/TradesTable';
@@ -96,7 +96,7 @@ function TradePageInner() {
   });
   const markPrice = useMarkPrice();
   const [trades, tradesLoaded] = useBonfidaTrades();
-  const [volumes, volumeLoaded] = useBonfidaVolumes();
+  const [volumes, volumeLoaded] = useVolumes();
 
   useEffect(() => {
     document.title = marketName ? `${marketName} — Serum` : 'Serum';
@@ -154,7 +154,8 @@ function TradePageInner() {
   const volumeChange = useMemo(() => {
     if (!volumeLoaded || !volumes) return;
 
-    return volumes[0].volumeUsd;
+    if (Array.isArray(volumes)) return volumes[0].volumeUsd;
+    return volumes.summary.totalVolume;
   }, [volumes, volumeLoaded]);
 
   const component = (() => {
@@ -272,7 +273,9 @@ function TradePageInner() {
                       <small>
                         <b>
                           {!isNullOrUndefined(volumeChange)
-                            ? volumeChange!.toLocaleString(undefined,{maximumFractionDigits:2})
+                            ? volumeChange!.toLocaleString(undefined, {
+                                maximumFractionDigits: 2,
+                              })
                             : '-'}
                         </b>
                       </small>
